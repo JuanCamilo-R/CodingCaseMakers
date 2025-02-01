@@ -1,5 +1,6 @@
 import pandas as pd
 
+# Creating the corrected products DataFrame
 products = pd.DataFrame([
     {"product_id": 1, "name": "HP Laptop", "category": "Laptop", "brand": "HP",
      "description": "15.6-inch FHD display, Intel i7, 16GB RAM, 512GB SSD."},
@@ -41,22 +42,39 @@ products = pd.DataFrame([
      "description": "11-inch LCD, Tensor G2, 128GB storage, Android 13."},
 ])
 
+# Correcting interactions DataFrame (removing syntax errors and ensuring consistency)
 interactions = pd.DataFrame([
     # User 1 Interactions
-    {"user_id": 1, "product_id": 1, "interaction_type": "purchased", "rating": 5.0},
-    {"user_id": 1, "product_id": 2, "interaction_type": "viewed", "rating": 4.0},
-    {"user_id": 1, "product_id": 9, "interaction_type": "purchased", "rating": 4.8},
-    {"user_id": 1, "product_id": 14, "interaction_type": "viewed", "rating": 3.5},
+    {"user_id": 1, "product_id": 1, "rating": 5.0},
+    {"user_id": 1, "product_id": 2, "rating": 4.0},
+    {"user_id": 1, "product_id": 8, "rating": 3.9},
+    {"user_id": 1, "product_id": 9, "rating": 4.8},
+    {"user_id": 1, "product_id": 10, "rating": 3.5},
+    {"user_id": 1, "product_id": 15, "rating": 4.4},
+    {"user_id": 1, "product_id": 16, "rating": 3.8},
+    {"user_id": 1, "product_id": 17, "rating": 4.5},
+    {"user_id": 1, "product_id": 18, "rating": 3.9},
+    {"user_id": 1, "product_id": 19, "rating": 4.2},
     
     # User 2 Interactions
-    {"user_id": 2, "product_id": 2, "interaction_type": "purchased", "rating": 3.0},
-    {"user_id": 2, "product_id": 3, "interaction_type": "viewed", "rating": 4.0},
-    {"user_id": 2, "product_id": 7, "interaction_type": "viewed", "rating": 4.5},
-    {"user_id": 2, "product_id": 16, "interaction_type": "purchased", "rating": 4.7},
+    {"user_id": 2, "product_id": 1, "rating": 3.0},
+    {"user_id": 2, "product_id": 2, "rating": 4.2},
+    {"user_id": 2, "product_id": 3, "rating": 4.0},
+    {"user_id": 2, "product_id": 4, "rating": 4.5},
+    {"user_id": 2, "product_id": 5, "rating": 3.8},
+    {"user_id": 2, "product_id": 10, "rating": 4.6},
+    {"user_id": 2, "product_id": 11, "rating": 3.7},
+    {"user_id": 2, "product_id": 12, "rating": 4.1},
+    {"user_id": 2, "product_id": 13, "rating": 3.6},
 
     # User 3 Interactions
-    {"user_id": 3, "product_id": 1, "interaction_type": "viewed", "rating": 2.5},
-    {"user_id": 3, "product_id": 4, "interaction_type": "purchased", "rating": 4.2},
-    {"user_id": 3, "product_id": 5, "interaction_type": "viewed", "rating": 3.8},
-    {"user_id": 3, "product_id": 17, "interaction_type": "purchased", "rating": 4.9},
+    {"user_id": 3, "product_id": 6, "rating": 4.1},
+    {"user_id": 3, "product_id": 7, "rating": 4.5},
+    {"user_id": 3, "product_id": 8, "rating": 3.9},
+    {"user_id": 3, "product_id": 9, "rating": 4.8},
+    {"user_id": 3, "product_id": 10, "rating": 3.5},
+    {"user_id": 3, "product_id": 11, "rating": 4.6},
+    {"user_id": 3, "product_id": 12, "rating": 3.7},
+    {"user_id": 3, "product_id": 13, "rating": 4.0},
+    {"user_id": 3, "product_id": 14, "rating": 3.6},
 ])
