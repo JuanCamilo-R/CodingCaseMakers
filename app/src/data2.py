@@ -1,5 +1,8 @@
 import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
+# Sample data
 products = pd.DataFrame([
     {"product_id": 1, "name": "HP Laptop", "category": "Laptop", "brand": "HP",
      "description": "15.6-inch FHD display, Intel i7, 16GB RAM, 512GB SSD."},
@@ -42,32 +45,65 @@ products = pd.DataFrame([
 ])
 
 interactions = pd.DataFrame([
-    # User 1 Interactions
+    # User 1 Interactions    
     {"user_id": 1, "product_id": 1, "interaction_type": "purchased", "rating": 5.0},
     {"user_id": 1, "product_id": 2, "interaction_type": "viewed", "rating": 4.0},
+    {"user_id": 1, "product_id": 8, "interaction_type": "viewed", "rating": 3.9},
     {"user_id": 1, "product_id": 9, "interaction_type": "purchased", "rating": 4.8},
-    {"user_id": 1, "product_id": 14, "interaction_type": "viewed", "rating": 3.5},
+    {"user_id": 1, "product_id": 10, "interaction_type": "viewed", "rating": 3.5},
+    {"user_id": 1, "product_id": 15, "interaction_type": "purchased", "rating": 4.4},
+    {"user_id": 1, "product_id": 16, "interaction_type": "viewed", "rating": 3.8},
+    {"user_id": 1, "product_id": 17, "interaction_type": "purchased", "rating": 4.5},
+    {"user_id": 1, "product_id": 18, "interaction_type": "viewed", "rating": 3.9},
+    {"user_id": 1, "product_id": 19, "interaction_type": "purchased", "rating": 4.2},
     
     # User 2 Interactions
-    {"user_id": 2, "product_id": 2, "interaction_type": "purchased", "rating": 3.0},
+    {"user_id": 2, "product_id": 1, "interaction_type": "viewed", "rating": 3.0},
+    {"user_id": 2, "product_id": 2, "interaction_type": "purchased", "rating": 4.2},
     {"user_id": 2, "product_id": 3, "interaction_type": "viewed", "rating": 4.0},
-    {"user_id": 2, "product_id": 7, "interaction_type": "viewed", "rating": 4.5},
-    {"user_id": 2, "product_id": 16, "interaction_type": "purchased", "rating": 4.7},
+    {"user_id": 2, "product_id": 4, "interaction_type": "purchased", "rating": 4.5},
+    {"user_id": 2, "product_id": 5, "interaction_type": "viewed", "rating": 3.8},
+    {"user_id": 2, "product_id": 10, "interaction_type": "purchased", "rating": 4.6},
+    {"user_id": 2, "product_id": 11, "interaction_type": "viewed", "rating": 3.7},
+    {"user_id": 2, "product_id": 12, "interaction_type": "purchased", "rating": 4.1},
+    {"user_id": 2, "product_id": 13, "interaction_type": "viewed", "rating": 3.6},
 
     # User 3 Interactions
-    {"user_id": 3, "product_id": 1, "interaction_type": "viewed", "rating": 2.5},
-    {"user_id": 3, "product_id": 4, "interaction_type": "purchased", "rating": 4.2},
-    {"user_id": 3, "product_id": 5, "interaction_type": "viewed", "rating": 3.8},
-    {"user_id": 3, "product_id": 17, "interaction_type": "purchased", "rating": 4.9},
-])
+    {"user_id": 3, "product_id": 6, "interaction_type": "viewed", "rating": 4.1},
+    {"user_id": 3, "product_id": 7, "interaction_type": "purchased", "rating": 4.5},
+    {"user_id": 3, "product_id": 8, "interaction_type": "viewed", "rating": 3.9},
+    {"user_id": 3, "product_id": 9, "interaction_type": "purchased", "rating": 4.8},
+    {"user_id": 3, "product_id": 10, "interaction_type": "viewed", "rating": 3.5},
+    {"user_id": 3, "product_id": 11, "interaction_type": "purchased", "rating": 4.6},
+    {"user_id": 3, "product_id": 12, "interaction_type": "viewed", "rating": 3.7},
+    {"user_id": 3, "product_id": 13, "interaction_type": "purchased", "rating": 4.0},
+    {"user_id": 3, "product_id": 14, "interaction_type": "viewed", "rating":3.6}
+     ])
 
-
-
-# Merge interactions with product details
+# Step 1: Preprocess the Data
 user_product_data = pd.merge(interactions, products, on="product_id", how="left")
-
-# Filter out purchased products for each user
 purchased_products = user_product_data[user_product_data["interaction_type"] == "purchased"]
 not_purchased_products = user_product_data[~user_product_data["product_id"].isin(purchased_products["product_id"])]
 
+# Step 2: Feature Engineering
+tfidf = TfidfVectorizer(stop_words="english")
+description_vectors = tfidf.fit_transform(products["description"])
+description_df = pd.DataFrame(description_vectors.toarray(), columns=tfidf.get_feature_names_out())
+description_df["product_id"] = products["product_id"]
 
+# Step 3: Calculate Similarity
+similarity_matrix = cosine_similarity(description_vectors)
+similarity_df = pd.DataFrame(similarity_matrix, index=products["product_id"], columns=products["product_id"])
+
+# Step 4: Recommend Products
+def recommend_products(user_id, purchased_products, similarity_df, top_n=3):
+    user_purchased = purchased_products[purchased_products["user_id"] == user_id]["product_id"]
+    similar_products = similarity_df[user_purchased].mean(axis=1).sort_values(ascending=False)
+    similar_products = similar_products[~similar_products.index.isin(user_purchased)]
+    return similar_products.head(top_n)
+
+# Example: Recommend products for User 1
+user_id = 1
+recommendations = recommend_products(user_id, purchased_products, similarity_df)
+print(f"Top recommendations for User {user_id}:")
+print(recommendations)
