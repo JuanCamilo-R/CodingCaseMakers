@@ -9,10 +9,8 @@ from langgraph.graph import START, MessagesState, StateGraph
 
 system_prompt = read_prompt_file("app/prompts/system.prompt.md")
 
-# Define a new graph
 workflow = StateGraph(state_schema=MessagesState)
 
-# Define the function that calls the model
 async def call_model(state: MessagesState):
     formatted_products = format_products(products)
     system_prompt_filled = replace_placeholders(system_prompt,
