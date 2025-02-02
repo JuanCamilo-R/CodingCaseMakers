@@ -83,6 +83,3 @@ async def chat(message: str, chat_history: List[str], chat_id: str) -> AsyncGene
 def delete_chat(chat_id):
     CONFIG = {"configurable": {"thread_id": chat_id}}
     app.update_state(CONFIG, {"messages": []})
-
-
-asyncio.
