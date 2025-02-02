@@ -55,9 +55,6 @@ interactions = pd.DataFrame([
     {"user_id": 1, "product_id": 10, "rating": 3.5},
     {"user_id": 1, "product_id": 15, "rating": 4.4},
     {"user_id": 1, "product_id": 16, "rating": 3.8},
-    {"user_id": 1, "product_id": 17, "rating": 4.5},
-    {"user_id": 1, "product_id": 18, "rating": 3.9},
-    {"user_id": 1, "product_id": 19, "rating": 4.2},
     
     # User 2 Interactions
     {"user_id": 2, "product_id": 1, "rating": 3.0},

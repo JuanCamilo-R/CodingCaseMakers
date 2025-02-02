@@ -71,6 +71,7 @@ async def chat(message: str, chat_history: List[str], chat_id: str) -> AsyncGene
     Yields:
         str: Streamed response from the model.
     """
+    print("Chat history: ", chat_history)
     CONFIG = {"configurable": {"thread_id": chat_id}}
     input_messages = [HumanMessage(content=message)]
     response = ""
@@ -79,7 +80,9 @@ async def chat(message: str, chat_history: List[str], chat_id: str) -> AsyncGene
         if msg.content:
             response += msg.content
             yield response
+        
 
 def delete_chat(chat_id):
     CONFIG = {"configurable": {"thread_id": chat_id}}
     app.update_state(CONFIG, {"messages": []})
+    print("State after cleaning: ", app.get_state(CONFIG).values)
