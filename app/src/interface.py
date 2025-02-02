@@ -1,13 +1,6 @@
 import gradio as gr
 from app.src.chatbot_service import chat
 
-# Define your chatbot function
-def chatbot_response(message, chat_history):
-    # Simulate a chatbot response (you can replace this with your actual chatbot logic)
-    bot_message = f"🤖Makers Tech Bot: {message}"
-    chat_history.append((message, bot_message))  # Append user and bot messages to the history
-    return "", chat_history  # Clear the input box and update the chat history
-
 # Custom Markdown for the interface
 markdown_description = """
 # **Makers Tech Pro Assistant**
