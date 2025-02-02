@@ -77,22 +77,12 @@ def create_interface():
         gr.Markdown(markdown_description, elem_id="title")  # Add a title and description
         
         # Chat history display
-        chatbot = gr.Chatbot(label="Chat History", height=400, elem_id="chatbot")  # Display chat history
+        chatbot = gr.Chatbot(label="Chat History", height=800, elem_id="chatbot")  # Display chat history
         
-        # Input and submit button
-        with gr.Row():
-            user_input = gr.Textbox(label="Your Message", placeholder="Type something...", scale=4, elem_id="user-input")  # Input textbox
-            submit_button = gr.Button("Send", scale=1, elem_id="send-button")  # Submit button
+        gr.ChatInterface(fn=chat, type="messages", chatbot=chatbot)
         
         # Clear button
         clear_button = gr.Button("Clear Chat", elem_id="clear-button")  # Button to clear chat history
-        
-        # Define interactions
-        submit_button.click(
-            fn=chat,  # Function to call
-            inputs=[user_input, chatbot],  # Inputs: user message and chat history
-            outputs=[user_input, chatbot]  # Outputs: clear input and update chat history
-        )
         
         # Clear chat history
         clear_button.click(
@@ -104,4 +94,3 @@ def create_interface():
 
 demo = create_interface()
 demo.launch()
-

@@ -32,7 +32,7 @@ app = workflow.compile(checkpointer=memory)
 
 config = {"configurable": {"thread_id": "abc123"}}
 
-async def chat_from_console():
+async def chat_from_console(message, history):
     while True:
         query = input("You: ")  # Get user input
         if query.lower() == "exit":
@@ -58,9 +58,7 @@ async def chat(message: str, chat_history):
     ):
         if msg.content:
             response += msg.content
-    
-    chat_history.append((message, response))
-    return "", chat_history
+            yield response
 
 
 
