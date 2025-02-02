@@ -44,7 +44,6 @@ app = workflow.compile(checkpointer=memory)
 
 # Configuration for the conversation id
 
-
 async def chat_from_console() -> None:
     """
     Interactive console chat function. Allows users to input queries and receive responses.
@@ -71,7 +70,6 @@ async def chat(message: str, chat_history: List[str], chat_id: str) -> AsyncGene
     Yields:
         str: Streamed response from the model.
     """
-    print("Chat history: ", chat_history)
     CONFIG = {"configurable": {"thread_id": chat_id}}
     input_messages = [HumanMessage(content=message)]
     response = ""
@@ -80,9 +78,7 @@ async def chat(message: str, chat_history: List[str], chat_id: str) -> AsyncGene
         if msg.content:
             response += msg.content
             yield response
-        
 
 def delete_chat(chat_id):
     CONFIG = {"configurable": {"thread_id": chat_id}}
     app.update_state(CONFIG, {"messages": []})
-    print("State after cleaning: ", app.get_state(CONFIG).values)

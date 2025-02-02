@@ -85,13 +85,7 @@ def create_interface(chat_fn, clear_fn, products):
         "User 2": 2,
         "User 3": 3
     }
-
-    def delete_last_message(chat_history):
-        if chat_history:
-            chat_history.pop()
-            print("chattt: ", chat_history)
-        return chat_history
-
+    
     with gr.Blocks(css=custom_css) as demo:
         gr.Markdown(markdown_description, elem_id="title")  # Add a title and description
 
@@ -152,7 +146,6 @@ def create_interface(chat_fn, clear_fn, products):
                     outputs=product_display  # Output: updated product display
                 )
 
-                
         # Function to dynamically clear the chat with the selected user's chat_id
         def dynamic_clear_fn(user, category):
             if not user:

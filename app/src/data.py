@@ -1,8 +1,5 @@
 import pandas as pd
 
-# Creating the corrected products DataFrame
-import pandas as pd
-
 # Define product data with reasonable price estimates
 products = pd.DataFrame([
     {"product_id": 1, "name": "HP Laptop", "category": "Laptop", "brand": "HP",
