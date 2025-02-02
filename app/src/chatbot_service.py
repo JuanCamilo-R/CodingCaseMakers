@@ -42,7 +42,7 @@ workflow.add_node("model", call_model)
 memory = MemorySaver()
 app = workflow.compile(checkpointer=memory)
 
-async def chat_from_console(message, history):
+async def chat_from_console():
     config = {"configurable": {"thread_id": "abc123"}}
     while True:
         query = input("You: ")  # Get user input
