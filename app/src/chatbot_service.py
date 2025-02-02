@@ -42,19 +42,22 @@ workflow.add_node("model", call_model)
 memory = MemorySaver()
 app = workflow.compile(checkpointer=memory)
 
-async def chat_from_console() -> None:
-    """
-    Interactive console chat function. Allows users to input queries and receive responses.
-    Type 'exit' to end the session.
-    """
+async def chat_from_console(message, history):
+    config = {"configurable": {"thread_id": "abc123"}}
     while True:
-        query = input("You: ").strip()
+        query = input("You: ")  # Get user input
         if query.lower() == "exit":
             print("Exiting chat...")
-            break
+            break  # Exit the loop
 
-        async for response in chat(query, []):
-            print(response, end="", flush=True)
+        input_messages = [HumanMessage(query)] 
+
+        async for msg, _ in app.astream(
+            {"messages": input_messages}, config,
+            stream_mode="messages",
+        ):
+            if msg.content:
+                print(msg.content, end="", flush=True)
         print()
 
 async def chat(message: str, chat_history: List[str], chat_id: str) -> AsyncGenerator[str, None]:
@@ -80,3 +83,6 @@ async def chat(message: str, chat_history: List[str], chat_id: str) -> AsyncGene
 def delete_chat(chat_id):
     CONFIG = {"configurable": {"thread_id": chat_id}}
     app.update_state(CONFIG, {"messages": []})
+
+
+asyncio.
