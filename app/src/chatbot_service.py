@@ -42,8 +42,6 @@ workflow.add_node("model", call_model)
 memory = MemorySaver()
 app = workflow.compile(checkpointer=memory)
 
-# Configuration for the conversation id
-
 async def chat_from_console() -> None:
     """
     Interactive console chat function. Allows users to input queries and receive responses.
