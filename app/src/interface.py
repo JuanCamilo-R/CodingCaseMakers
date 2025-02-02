@@ -1,4 +1,5 @@
 import gradio as gr
+from app.src.chatbot_service import chat
 
 # Define your chatbot function
 def chatbot_response(message, chat_history):
@@ -70,35 +71,37 @@ custom_css = """
 }
 """
 
-# Create the Gradio interface
-with gr.Blocks(css=custom_css) as demo:
-    gr.Markdown(markdown_description, elem_id="title")  # Add a title and description
-    
-    # Chat history display
-    chatbot = gr.Chatbot(label="Chat History", height=400, elem_id="chatbot")  # Display chat history
-    
-    # Input and submit button
-    with gr.Row():
-        user_input = gr.Textbox(label="Your Message", placeholder="Type something...", scale=4, elem_id="user-input")  # Input textbox
-        submit_button = gr.Button("Send", scale=1, elem_id="send-button")  # Submit button
-    
-    # Clear button
-    clear_button = gr.Button("Clear Chat", elem_id="clear-button")  # Button to clear chat history
-    
-    # Define interactions
-    submit_button.click(
-        fn=chatbot_response,  # Function to call
-        inputs=[user_input, chatbot],  # Inputs: user message and chat history
-        outputs=[user_input, chatbot]  # Outputs: clear input and update chat history
-    )
-    
-    # Clear chat history
-    clear_button.click(
-        fn=lambda: [],  # Clear the chat history
-        inputs=None,
-        outputs=chatbot
-    )
+def create_interface():
+    # Create the Gradio interface
+    with gr.Blocks(css=custom_css) as demo:
+        gr.Markdown(markdown_description, elem_id="title")  # Add a title and description
+        
+        # Chat history display
+        chatbot = gr.Chatbot(label="Chat History", height=400, elem_id="chatbot")  # Display chat history
+        
+        # Input and submit button
+        with gr.Row():
+            user_input = gr.Textbox(label="Your Message", placeholder="Type something...", scale=4, elem_id="user-input")  # Input textbox
+            submit_button = gr.Button("Send", scale=1, elem_id="send-button")  # Submit button
+        
+        # Clear button
+        clear_button = gr.Button("Clear Chat", elem_id="clear-button")  # Button to clear chat history
+        
+        # Define interactions
+        submit_button.click(
+            fn=chat,  # Function to call
+            inputs=[user_input, chatbot],  # Inputs: user message and chat history
+            outputs=[user_input, chatbot]  # Outputs: clear input and update chat history
+        )
+        
+        # Clear chat history
+        clear_button.click(
+            fn=lambda: [],  # Clear the chat history
+            inputs=None,
+            outputs=chatbot
+        )
+        return demo
 
-
-# Launch the interface
+demo = create_interface()
 demo.launch()
+

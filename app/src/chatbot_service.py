@@ -32,7 +32,7 @@ app = workflow.compile(checkpointer=memory)
 
 config = {"configurable": {"thread_id": "abc123"}}
 
-async def chat():
+async def chat_from_console():
     while True:
         query = input("You: ")  # Get user input
         if query.lower() == "exit":
@@ -49,4 +49,19 @@ async def chat():
                 print(msg.content, end="", flush=True)
         print()
 
-asyncio.run(chat())
+async def chat(message: str, chat_history):
+    input_messages = [HumanMessage(message)] 
+    response = ""
+    async for msg, metadata in app.astream(
+        {"messages": input_messages}, config,
+        stream_mode="messages",
+    ):
+        if msg.content:
+            response += msg.content
+    
+    chat_history.append((message, response))
+    return "", chat_history
+
+
+
+# asyncio.run(chat())
