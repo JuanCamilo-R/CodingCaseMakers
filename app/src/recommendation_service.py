@@ -11,6 +11,9 @@ tfidf_matrix = tfidf.fit_transform(products['description'])
 # Compute cosine similarity between products
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
+def get_product_by_id(product_id: int):
+    return products[products["product_id"] == product_id].to_dict(orient="records")[0]
+
 # Function to recommend products based on user interactions
 def recommend_products(user_id):
     user_ratings = interactions[interactions['user_id'] == user_id]
@@ -36,7 +39,7 @@ def recommend_products(user_id):
     for idx, score in sorted_products:
         product_id = products.iloc[idx]['product_id']
         if product_id not in user_ratings['product_id'].values:
-            recommendations.append((product_id, score))
+            recommendations.append((int(product_id), score))
     
     return recommendations
 
@@ -54,16 +57,12 @@ def categorize_recommendations(user_id):
         threshold_low = np.percentile(scores, 25)
         
         for product_id, score in recommendations:
+            product = get_product_by_id(product_id)
             if score >= threshold_high:
-                categories["Highly Recommended"].append(product_id)
+                categories["Highly Recommended"].append(product)
             elif score >= threshold_low:
-                categories["Recommended"].append(product_id)
+                categories["Recommended"].append(product)
             else:
-                categories["Not Recommended"].append(product_id)
+                categories["Not Recommended"].append(product)
     
     return categories
-
-# Generate recommendations for a sample user
-user_id = 1
-recommendations = categorize_recommendations(user_id)
-print(recommendations)

@@ -43,7 +43,7 @@ memory = MemorySaver()
 app = workflow.compile(checkpointer=memory)
 
 # Configuration for the conversation id
-CONFIG = {"configurable": {"thread_id": "abc123"}}
+
 
 async def chat_from_console() -> None:
     """
@@ -60,7 +60,7 @@ async def chat_from_console() -> None:
             print(response, end="", flush=True)
         print()
 
-async def chat(message: str, chat_history: List[str]) -> AsyncGenerator[str, None]:
+async def chat(message: str, chat_history: List[str], chat_id: str) -> AsyncGenerator[str, None]:
     """
     Handles the chat interaction asynchronously.
     
@@ -71,6 +71,7 @@ async def chat(message: str, chat_history: List[str]) -> AsyncGenerator[str, Non
     Yields:
         str: Streamed response from the model.
     """
+    CONFIG = {"configurable": {"thread_id": chat_id}}
     input_messages = [HumanMessage(content=message)]
     response = ""
 
@@ -78,3 +79,7 @@ async def chat(message: str, chat_history: List[str]) -> AsyncGenerator[str, Non
         if msg.content:
             response += msg.content
             yield response
+
+def delete_chat(chat_id):
+    CONFIG = {"configurable": {"thread_id": chat_id}}
+    app.update_state(CONFIG, {"messages": []})
