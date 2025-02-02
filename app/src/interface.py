@@ -64,7 +64,7 @@ custom_css = """
 }
 """
 
-def create_interface():
+def create_interface(chat_fn):
     # Create the Gradio interface
     with gr.Blocks(css=custom_css) as demo:
         gr.Markdown(markdown_description, elem_id="title")  # Add a title and description
@@ -72,7 +72,7 @@ def create_interface():
         # Chat history display
         chatbot = gr.Chatbot(label="Chat History", height=800, elem_id="chatbot")  # Display chat history
         
-        gr.ChatInterface(fn=chat, type="messages", chatbot=chatbot)
+        gr.ChatInterface(fn=chat_fn, type="messages", chatbot=chatbot)
         
         # Clear button
         clear_button = gr.Button("Clear Chat", elem_id="clear-button")  # Button to clear chat history
@@ -84,6 +84,3 @@ def create_interface():
             outputs=chatbot
         )
         return demo
-
-demo = create_interface()
-demo.launch()
